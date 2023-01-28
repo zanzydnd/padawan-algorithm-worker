@@ -1,6 +1,9 @@
+import datetime
 import io
 import shutil
 from subprocess import run, PIPE, Popen
+
+from models import TestResult
 
 
 class AlgorithmTestRunner:
@@ -23,16 +26,25 @@ class AlgorithmTestRunner:
 
         results = []
 
-        with Popen(["python3", "students_solution.py"], stderr=PIPE, stdout=PIPE, stdin=PIPE, universal_newlines=True,
-                   bufsize=1) as process:
-            for to_stdin in self.test_cases.keys():
-                print(to_stdin)
-                process.stdin.write(to_stdin + "\n")
+        for to_stdin in self.test_cases.keys():
+            with Popen(["python3", "students_solution.py"], stderr=PIPE, stdout=PIPE, stdin=PIPE,
+                       universal_newlines=True,
+                       bufsize=len(self.test_cases.keys())) as process:
+                time_start = datetime.datetime.now()
 
-                data = process.stdout.read().strip().split("\n")
-                print(data)
-                results.append(
-                    "+" if data == self.test_cases.get(to_stdin) else "-"
-                )
+                result_out, error = process.communicate(to_stdin)
+                time_end = datetime.datetime.now()
+                print(result_out.strip().split("\n"))
+                print(error)
+
+                test_result = TestResult()
+                test_result.time_duration_in_seconds = (time_end - time_start).total_seconds()
+                if error:
+                    test_result.success = False
+                    test_result.std_err = error
+                else:
+                    test_result.success = True
+
+                results.append(test_result)
 
         print(results)

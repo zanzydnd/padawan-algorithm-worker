@@ -8,7 +8,8 @@ if __name__ == '__main__':
 
     test_runner = AlgorithmTestRunner(
         test_cases={
-            "1 3": ["-2", "4"]
+            "1 3": ["-2", "4"],
+            "3 1": ["2", "4"]
         },
         file_to_run=py_solution
     )
