@@ -1,6 +1,6 @@
 from celery import Celery
 
-from core.config import settings
+from src.core.config import settings
 
 celery_app = Celery('celery_main', broker=settings.REDIS_URL, include=["src.tasks", ])
 celery_app.conf.update(
