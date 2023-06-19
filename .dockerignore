@@ -2,3 +2,4 @@ env/
 .idea
 README.md
 .gitignore
+.git/
