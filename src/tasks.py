@@ -23,7 +23,6 @@ def clean_up(ident: str, git_accessor: GitAccessor):
 def check_student_solution(
         submission_id: int, scenarios: List[dict], git_url: str
 ):
-    print(scenarios)
 
     ident = str(uuid4())[:8]
 
@@ -33,5 +32,4 @@ def check_student_solution(
     test_runner.run()
 
     clean_up(ident, git_accessor)
-
     requests.post("http://127.0.0.1:8000/api/v1/submission_result/", json=test_runner.create_result_data(submission_id))
